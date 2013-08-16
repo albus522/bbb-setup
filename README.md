@@ -3,6 +3,63 @@ BeagleBone Black Setup
 
 This is where I will document the complete setup for a BeagleBone Black for use with [Ruby](http://www.ruby-lang.org/) development.
 
+0 to Ruby in 7 Steps
+====================
+
+1. Setup Debian Wheezy [original here](http://circuitco.com/support/index.php?title=Debian_On_BeagleBone_Black)
+   1. Download image file
+      * Install to SD [here](http://www.armhf.com/index.php/download/)
+      * Install to eMMC [here](http://elinux.org/BeagleBoardDebian#eMMC:_BeagleBone_Black)
+   2. Unpack the image
+      * Mac (requires p7zip installed via homebrew)
+        * 7z x debian-wheezy-7.0.0-armhf-3.8.13-bone20.img.xz
+   3. Copy the image to the sd card
+      * Mac (terminal):
+        1. diskutil list
+        2. Insert SD card
+        3. diskutil list (note the new disk which should be your SD card)
+        4. diskutil unmountDisk /dev/disk2 (replace 2 with appropriate disk number from the last step)
+        5. sudo dd if=debian-wheezy-7.0.0-armhf-3.8.13-bone20.img of=/dev/rdisk2 bs=1m (use the downloaded filename and disk number from above)
+        6. diskutil eject /dev/disk2 (replace 2 with the above disk number)
+        7. Remove SD card
+   4. Follow [these](http://circuitco.com/support/index.php?title=Debian_On_BeagleBone_Black) instructions to finish booting your BeagleBoard Black
+2. Setup your ssh public key
+   1. LOCAL: scp ~/.ssh/id_rsa.pub debian@192.168.1.100:~/
+      * Default password is "debian"
+   2. REMOTE: mkdir .ssh
+   3. REMOTE: cat id_rsa.pub >> .ssh/authorized_keys
+   4. REMOTE: chmod 700 .ssh
+   5. REMOTE: chmod 600 .ssh/authorized_keys
+3. Sudo without a password (optional)
+   1. sudo visudo
+      * Default password is "debian"
+   2. Add this on its own line at the end of the file
+      * debian ALL=(ALL) NOPASSWD: ALL
+4. Resize the partition to use all available space [reference](http://www.armhf.com/index.php/expanding-linux-partitions-part-2-of-2/)
+   1. sudo fdisk /dev/mmcblk0
+      1. d
+      2. 2
+      3. n
+      4. p
+      5. 2
+      6. (Enter)
+      7. (Enter)
+      8. w
+   2. sudo reboot
+   3. sudo resize2fs /dev/mmcblk0p2
+5. Update system
+   1. sudo aptitude update
+   2. sudo aptitude upgrade
+6. Install pre-reqs
+   * sudo aptitude install build-essential openssl libreadline6 libreadline6-dev zlib1g zlib1g-dev libssl-dev libyaml-dev libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison
+7. Install ruby
+   1. wget ftp://ftp.ruby-lang.org/pub/ruby/2.0/ruby-2.0.0-p247.tar.gz
+   2. tar xzf ruby-2.0.0-p247.tar.gz
+   3. cd ruby-2.0.0-p247
+   4. ./configure --prefix=/usr/local
+   5. make && sudo make install
+   3. gem update --system
+
 Contributions
 =============
 
