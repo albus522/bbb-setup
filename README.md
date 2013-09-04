@@ -62,6 +62,17 @@ This is where I will document the complete setup for a BeagleBone Black for use 
    5. make && sudo make install
    3. gem update --system
 
+Install DTC (device tree compiler)
+==================================
+1. wget -c https://raw.github.com/RobertCNelson/tools/master/pkgs/dtc.sh
+2. chmod +x dtc.sh
+3. ./dtc.sh
+4. cd git/dtc/
+5. git checkout master -f
+6. git pull git://github.com/RobertCNelson/dtc.git dtc-fixup-65cc4d2
+7. make PREFIX=/usr/local/ CC=gcc CROSS_COMPILE= all
+8. make PREFIX=/usr/local/ install
+
 Contributions
 =============
 
