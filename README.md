@@ -12,24 +12,26 @@ This is where I will document the complete setup for a BeagleBone Black for use 
       * Install to eMMC [here](http://elinux.org/BeagleBoardDebian#eMMC:_BeagleBone_Black)
    2. Unpack the image
       * Mac (requires p7zip installed via homebrew)
-        * 7z x debian-wheezy-7.0.0-armhf-3.8.13-bone20.img.xz
+         * 7z x debian-wheezy-7.0.0-armhf-3.8.13-bone20.img.xz
    3. Copy the image to the sd card
       * Mac (terminal):
-        1. diskutil list
-        2. Insert SD card
-        3. diskutil list (note the new disk which should be your SD card)
-        4. diskutil unmountDisk /dev/disk2 (replace 2 with appropriate disk number from the last step)
-        5. sudo dd if=debian-wheezy-7.0.0-armhf-3.8.13-bone20.img of=/dev/rdisk2 bs=1m (use the downloaded filename and disk number from above)
-        6. diskutil eject /dev/disk2 (replace 2 with the above disk number)
-        7. Remove SD card
+         1. diskutil list
+         2. Insert SD card
+         3. diskutil list (note the new disk which should be your SD card)
+         4. diskutil unmountDisk /dev/disk2 (replace 2 with appropriate disk number from the last step)
+         5. sudo dd if=debian-wheezy-7.0.0-armhf-3.8.13-bone20.img of=/dev/rdisk2 bs=1m (use the downloaded filename and disk number from above)
+         6. diskutil eject /dev/disk2 (replace 2 with the above disk number)
+         7. Remove SD card
    4. Follow [these](http://circuitco.com/support/index.php?title=Debian_On_BeagleBone_Black) instructions to finish booting your BeagleBoard Black
-2. Setup your ssh public key
-   1. LOCAL: scp ~/.ssh/id_rsa.pub debian@192.168.1.100:~/
-      * Default password is "debian"
-   2. REMOTE: mkdir .ssh
-   3. REMOTE: cat id_rsa.pub >> .ssh/authorized_keys
-   4. REMOTE: chmod 700 .ssh
-   5. REMOTE: chmod 600 .ssh/authorized_keys
+2. Setup your ssh public key (optional)
+   * Local:
+      * scp ~/.ssh/id_rsa.pub debian@192.168.7.2:~/
+         * Default password is "debian"
+   * Remote:
+      1. mkdir .ssh
+      2. cat id_rsa.pub >> .ssh/authorized_keys
+      3. chmod 700 .ssh
+      4. chmod 600 .ssh/authorized_keys
 3. Sudo without a password (optional)
    1. sudo visudo
       * Default password is "debian"
@@ -37,14 +39,14 @@ This is where I will document the complete setup for a BeagleBone Black for use 
       * debian ALL=(ALL) NOPASSWD: ALL
 4. Resize the partition to use all available space [reference](http://www.armhf.com/index.php/expanding-linux-partitions-part-2-of-2/)
    1. sudo fdisk /dev/mmcblk0
-      1. d
-      2. 2
-      3. n
-      4. p
-      5. 2
-      6. (Enter)
-      7. (Enter)
-      8. w
+      1. d        (delete partition)
+      2. 2        (2nd partition)
+      3. n        (new partition)
+      4. p        (primary partition)
+      5. 2        (2nd partition)
+      6. (Enter)  (Default value)
+      7. (Enter)  (Default value)
+      8. w        (write partition table)
    2. sudo reboot
    3. sudo resize2fs /dev/mmcblk0p2
 5. Update system
